@@ -34,7 +34,8 @@ jobs:
           mkdir -p ../omegat/build/libs
           curl -sL -o /tmp/omegat.zip \
             "https://sourceforge.net/projects/omegat/files/OmegaT%20-%20Standard/OmegaT%206.0.1/OmegaT_6.0.1_Without_JRE.zip/download"
-          unzip -j /tmp/omegat.zip "OmegaT_6.0.1_Without_JRE/lib/OmegaT.jar" -d ../omegat/build/libs/
+          unzip -l /tmp/omegat.zip | head -20
+          unzip -j /tmp/omegat.zip "*/lib/OmegaT.jar" -d ../omegat/build/libs/
 
       - name: Build with Gradle
         run: ./gradlew fatJar
