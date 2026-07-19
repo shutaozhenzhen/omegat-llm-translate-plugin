@@ -37,7 +37,9 @@ jobs:
           unzip -j /tmp/omegat.zip "*/OmegaT.jar" -d ../omegat/build/libs/
 
       - name: Build with Gradle
-        run: ./gradlew fatJar
+        run: |
+          chmod +x gradlew
+          ./gradlew fatJar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
