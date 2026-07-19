@@ -1,0 +1,18 @@
+.gradle/
+build/
+bin/
+*.jar
+
+# IDE
+.classpath
+.project
+.settings/
+*.iml
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local Gradle config (contains user-specific JDK path)
+gradle.properties

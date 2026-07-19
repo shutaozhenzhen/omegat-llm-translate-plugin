@@ -1,0 +1,61 @@
+plugins {
+    id 'java-library'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+configurations.all {
+    attributes.attribute(
+        Attribute.of('org.gradle.jvm.environment', String),
+        'standard-jvm'
+    )
+}
+
+repositories {
+    mavenCentral()
+}
+
+def omegatJar = file('../omegat/build/libs/OmegaT.jar')
+
+dependencies {
+    implementation('io.github.lnyo-cly:ai4j:2.2.0') {
+        exclude group: 'org.apache.tika'
+        exclude group: 'com.alibaba', module: 'dashscope-sdk-java'
+        exclude group: 'org.graalvm.sdk'
+        exclude group: 'com.auth0'
+        exclude group: 'cn.hutool'
+        exclude group: 'org.openjdk.nashorn'
+        exclude group: 'org.slf4j', module: 'slf4j-simple'
+        exclude group: 'com.knuddels'
+    }
+    compileOnly files(omegatJar)
+}
+
+jar {
+    manifest {
+        attributes(
+            'Manifest-Version': '1.0',
+            'OmegaT-Plugins': 'com.thebook.llmtranslate.LLMTranslatePlugin'
+        )
+    }
+}
+
+task fatJar(type: Jar) {
+    archiveBaseName = project.name
+    archiveClassifier = ''
+    from sourceSets.main.output
+    doFirst {
+        from configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+        attributes(
+            'Manifest-Version': '1.0',
+            'OmegaT-Plugins': 'com.thebook.llmtranslate.LLMTranslatePlugin'
+        )
+    }
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+}
+
