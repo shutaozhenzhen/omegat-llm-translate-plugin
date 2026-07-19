@@ -21,6 +21,13 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Setup Gradle 6.9
+        run: |
+          curl -sL -o /tmp/gradle.zip \
+            "https://services.gradle.org/distributions/gradle-6.9-bin.zip"
+          unzip -q /tmp/gradle.zip -d /tmp/gradle
+          echo "/tmp/gradle/gradle-6.9/bin" >> $GITHUB_PATH
+
       - name: Cache Gradle
         uses: actions/cache@v4
         with:
@@ -37,9 +44,7 @@ jobs:
           unzip -j /tmp/omegat.zip "*/OmegaT.jar" -d ../omegat/build/libs/
 
       - name: Build with Gradle
-        run: |
-          chmod +x gradlew
-          ./gradlew fatJar
+        run: gradle fatJar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
